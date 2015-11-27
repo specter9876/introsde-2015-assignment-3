@@ -39,3 +39,13 @@ public interface People {
     @WebResult(name="hpId") 
     public int updatePersonHP(@WebParam(name="personId") int id, @WebParam(name="healthProfile") LifeStatus hp);
 }
+
+/*
+ // The WebResult annotation specifies that the name of the result of the
+ // operation in the generated WSDL is "IntegerOutput", rather than the
+ // default name "return".   The WebParam annotation specifies that the input
+ // parameter name in the WSDL file is "IntegerInput" rather than the Java
+ // name of the parameter, "input".
+ @WebMethod()
+ @WebResult(name="IntegerOutput",
+ targetNamespace="http://example.org/complex")*/

@@ -120,7 +120,7 @@ public class Person implements Serializable {
 	
 	// Database operations
 	// Notice that, for this example, we create and destroy and entityManager on each operation. 
-	// How would you change the DAO to not having to create the entity manager every time? Per questo motivo si mettono nel DAO
+	// How would you change the DAO to not having to create the entity manager every time? 
 	public static Person getPersonById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		Person p = em.find(Person.class, personId);
