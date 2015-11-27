@@ -50,7 +50,7 @@ public enum LifeCoachDao {
 	    instance.closeConnections(em);
 	    return list;
 	}
-	
+	///qui vanno messe????
 	// add other database global access operations
 
 }
