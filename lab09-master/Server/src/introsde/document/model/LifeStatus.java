@@ -28,7 +28,7 @@ import javax.persistence.OneToOne;
 @Entity
 @Table(name = "LifeStatus")
 @NamedQuery(name = "LifeStatus.findAll", query = "SELECT l FROM LifeStatus l")
-@XmlRootElement(name="Measure")
+//@XmlRootElement(name="Measure")
 public class LifeStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 

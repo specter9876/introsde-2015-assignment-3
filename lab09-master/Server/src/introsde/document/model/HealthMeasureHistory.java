@@ -22,6 +22,7 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name="HealthMeasureHistory")
 @NamedQuery(name="HealthMeasureHistory.findAll", query="SELECT h FROM HealthMeasureHistory h")
-@XmlRootElement
+//@XmlRootElement
 public class HealthMeasureHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -94,7 +95,7 @@ public class HealthMeasureHistory implements Serializable {
 	public void setMeasureDefinition(MeasureDefinition param) {
 	    this.measureDefinition = param;
 	}
-
+     @XmlTransient
 	public Person getPerson() {
 	    return person;
 	}

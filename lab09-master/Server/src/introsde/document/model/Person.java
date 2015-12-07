@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,9 @@ import java.util.List;
 @Entity
 @Table(name="Person")
 @NamedQuery(name="Person.findAll", query="SELECT p FROM Person p")
-@XmlRootElement
+@XmlType(propOrder = { "idPerson", "name", "lastname", "birthdate", "email",
+"username", "lifeStatus" })
+//@XmlRootElement
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +37,8 @@ public class Person implements Serializable {
 	    pkColumnName="name", valueColumnName="seq",
 	    pkColumnValue="Person")
 	@Column(name="idPerson")
-	private int idPerson;
+	//private Long idPerson;
+    private int idPerson;
 
 	@Column(name="lastname")
 	private String lastname;
@@ -75,11 +79,13 @@ public class Person implements Serializable {
 		this.email = email;
 	}
 
-	public int getIdPerson() {
+	//public Long getIdPerson() {
+    public int getIdPerson() {
 		return this.idPerson;
 	}
 
-	public void setIdPerson(int idPerson) {
+	//public void setIdPerson(Long idPerson) {
+    public void setIdPerson(int idPerson) {
 		this.idPerson = idPerson;
 	}
 
@@ -121,9 +127,12 @@ public class Person implements Serializable {
 	// Database operations
 	// Notice that, for this example, we create and destroy and entityManager on each operation. 
 	// How would you change the DAO to not having to create the entity manager every time? 
-	public static Person getPersonById(int personId) {
+	//public static Person getPersonById(Long personId) {
+    public static Person getPersonById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		Person p = em.find(Person.class, personId);
+       // System.out.println("check id: "+ (int) (long) personId);
+		//Person p = em.find(Person.class, (int) (long) personId);
+        Person p = em.find(Person.class,personId);
 		LifeCoachDao.instance.closeConnections(em);
 		return p;
 	}

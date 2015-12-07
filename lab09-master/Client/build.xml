@@ -53,7 +53,7 @@
 
 	<!-- PART 2: General properties definitions -->
 	<property name="build.dir" value="build" />
-	<property name="src.dir" value="Examples/src" />
+	<property name="src.dir" value="./src" />
 	<property name="lib.dir" value="WebContent/WEB-INF/lib" />
 	<property name="web.dir" value="." />
 
@@ -107,8 +107,22 @@
 			</fileset>
 		</copy>
 	</target>
+    
+    <target name="start">
+        <echo message="app start client in ${build.dir}" />
+        <java classname="PeopleClient" classpath="${build.dir}" fork="true">
+            <arg value="$JAVA_OPTS  -cp" />
+            <classpath>
+                <path location="build" />
+                <fileset dir="WebContent/WEB-INF/lib">
+                    <include name="**/*.jar" />
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
 
-	<!-- make sure you have created first the WebContent folder, including a META-INF folder, WEB-INF/web.xml file and WEB-INF/lib folder --> 
+	<!-- make sure you have created first the WebContent folder, including a META-INF folder, WEB-INF/web.xml file and WEB-INF/lib folder -->
 	<target name="create.war" depends="compile">
 		<war destfile="sdelab08.war" webxml="${web.dir}/WebContent/WEB-INF/web.xml">
 			<fileset dir="${web.dir}/WebContent">
