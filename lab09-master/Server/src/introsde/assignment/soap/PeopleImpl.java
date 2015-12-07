@@ -189,27 +189,38 @@ public class PeopleImpl implements People {
 	public  LifeStatus savePersonMeasure(Long id,LifeStatus m) {
         Person person=  Person.getPersonById((int)(long) id);
         List<LifeStatus> lifestatus= person.getLifeStatus();
+    
         MeasureDefinition measure=null;
-         MeasureDefinition measure2=null;
+        MeasureDefinition measure2=null;
+        //m.setPerson(person);
         
         for(LifeStatus lf : lifestatus){
             measure=lf.getMeasureDefinition();
             measure2=m.getMeasureDefinition();
+            //m.setPerson(person);
             
             if(person.getIdPerson()==id){//redundant
-                if(measure.getIdMeasureDef()==measure2.getIdMeasureDef()){
+                System.out.println("quiii");
+                if(measure.getMeasureName().equals(measure2.getMeasureName())){
                     LifeStatus.removeLifeStatus(lf);
                     
                     HealthMeasureHistory hlm =new HealthMeasureHistory();
-                    hlm.setTimestamp(new Date(System.currentTimeMillis()));
+                    //hlm.setTimestamp(""+System.currentTimeMillis()));
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = new Date();
+                    
+                    
+                    hlm.setTimestamp(dateFormat.format(date));
                     hlm.setValue(m.getValue());
                     hlm.setPerson(person);
                     hlm.setMeasureDefinition(measure);
                     //hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
-                    
+                    hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
                     HealthMeasureHistory.saveHealthMeasureHistory(hlm);
-                    
-                    LifeStatus.saveLifeStatus(m);
+                    lf.setValue(m.getValue());
+                    LifeStatus.saveLifeStatus(lf);
+                    m=lf;
+                    System.out.println("salavato tutto");
                     
                 }
             }

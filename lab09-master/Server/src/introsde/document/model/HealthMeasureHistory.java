@@ -44,12 +44,15 @@ public class HealthMeasureHistory implements Serializable {
 	@Column(name="idMeasureHistory")
 	private int idMeasureHistory;
 
-	@Temporal(TemporalType.DATE)
+	
 	@Column(name="timestamp")
-	private Date timestamp;
+	private String timestamp;
 
 	@Column(name="value")
 	private String value;
+    
+    @Column(name="idMeasureDefinition")
+	private int idMeasureDefinition;
 
 	@ManyToOne
 	@JoinColumn(name = "idMeasureDef", referencedColumnName = "idMeasureDef")
@@ -64,6 +67,16 @@ public class HealthMeasureHistory implements Serializable {
 	public HealthMeasureHistory() {
 	}
 
+    
+    public int getIdMeasureDefinition() {
+		return this.idMeasureDefinition;
+	}
+    
+
+    public void setIdMeasureDefinition (int idMeasureDefinition) {
+		this.idMeasureDefinition = idMeasureDefinition;
+    }
+    
 	public int getIdMeasureHistory() {
 		return this.idMeasureHistory;
 	}
@@ -72,11 +85,11 @@ public class HealthMeasureHistory implements Serializable {
 		this.idMeasureHistory = idMeasureHistory;
 	}
 
-	public Date getTimestamp() {
+	public String getTimestamp() {
 		return this.timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -107,6 +120,7 @@ public class HealthMeasureHistory implements Serializable {
 	// database operations
 	public static HealthMeasureHistory getHealthMeasureHistoryById(int id) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		HealthMeasureHistory p = em.find(HealthMeasureHistory.class, id);
 		LifeCoachDao.instance.closeConnections(em);
 		return p;
@@ -114,6 +128,7 @@ public class HealthMeasureHistory implements Serializable {
 	
 	public static List<HealthMeasureHistory> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 	    List<HealthMeasureHistory> list = em.createNamedQuery("HealthMeasureHistory.findAll", HealthMeasureHistory.class).getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
@@ -121,6 +136,7 @@ public class HealthMeasureHistory implements Serializable {
 	
 	public static HealthMeasureHistory saveHealthMeasureHistory(HealthMeasureHistory p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(p);
@@ -131,6 +147,7 @@ public class HealthMeasureHistory implements Serializable {
 	
 	public static HealthMeasureHistory updateHealthMeasureHistory(HealthMeasureHistory p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		p=em.merge(p);
@@ -141,6 +158,7 @@ public class HealthMeasureHistory implements Serializable {
 	
 	public static void removeHealthMeasureHistory(HealthMeasureHistory p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 	    p=em.merge(p);

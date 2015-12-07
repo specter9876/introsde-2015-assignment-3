@@ -93,6 +93,7 @@ public class LifeStatus implements Serializable {
 	// How would you change the DAO to not having to create the entity manager every time? 
 	public static LifeStatus getLifeStatusById(int lifestatusId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		LifeStatus p = em.find(LifeStatus.class, lifestatusId);
 		LifeCoachDao.instance.closeConnections(em);
 		return p;
@@ -100,6 +101,7 @@ public class LifeStatus implements Serializable {
 	
 	public static List<LifeStatus> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 	    List<LifeStatus> list = em.createNamedQuery("LifeStatus.findAll", LifeStatus.class).getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
@@ -107,6 +109,7 @@ public class LifeStatus implements Serializable {
 	
 	public static LifeStatus saveLifeStatus(LifeStatus p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(p);
@@ -117,6 +120,7 @@ public class LifeStatus implements Serializable {
 	
 	public static LifeStatus updateLifeStatus(LifeStatus p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		p=em.merge(p);
@@ -127,6 +131,7 @@ public class LifeStatus implements Serializable {
 	
 	public static void removeLifeStatus(LifeStatus p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 	    p=em.merge(p);

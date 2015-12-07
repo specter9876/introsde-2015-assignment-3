@@ -49,9 +49,9 @@ public class Person implements Serializable {
 	@Column(name="username")
 	private String username;
 	
-	@Temporal(TemporalType.DATE)
+    
 	@Column(name="birthdate")
-	private Date birthdate;
+	private String birthdate;
 	
 	@Column(name="email")
 	private String email;
@@ -63,11 +63,11 @@ public class Person implements Serializable {
 	public Person() {
 	}
 	
-	public Date getBirthdate() {
+	public String getBirthdate() {
 		return this.birthdate;
 	}
 
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 
@@ -130,6 +130,7 @@ public class Person implements Serializable {
 	//public static Person getPersonById(Long personId) {
     public static Person getPersonById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
        // System.out.println("check id: "+ (int) (long) personId);
 		//Person p = em.find(Person.class, (int) (long) personId);
         Person p = em.find(Person.class,personId);
@@ -139,6 +140,7 @@ public class Person implements Serializable {
 	
 	public static List<Person> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 	    List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
@@ -146,6 +148,7 @@ public class Person implements Serializable {
 	
 	public static Person savePerson(Person p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(p);
@@ -156,6 +159,7 @@ public class Person implements Serializable {
 	
 	public static Person updatePerson(Person p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		p=em.merge(p);
@@ -166,6 +170,7 @@ public class Person implements Serializable {
 	
 	public static void removePerson(Person p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 	    p=em.merge(p);
