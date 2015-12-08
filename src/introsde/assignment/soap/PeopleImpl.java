@@ -39,8 +39,12 @@ public class PeopleImpl implements People {
      //Method #3:
     @Override
 	public Person updatePerson(Person person) {
-		Person.updatePerson(person);
-		return person;
+        int id= person.getIdPerson();
+        System.out.println("GLAAAAAAG :" +id);
+        Person p = Person.getPersonById(id);
+        p.setName(person.getName());
+		Person.updatePerson(p);
+		return p;
 	}
     
      //Method #4:
@@ -55,6 +59,15 @@ public class PeopleImpl implements People {
 	public int deletePerson(Long id) {
     //public Long deletePerson(int id) {
 		Person p = Person.getPersonById((int)(long) id);
+        List<HealthMeasureHistory> list= HealthMeasureHistory.getAll();
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getPerson().getIdPerson()==(int)(long) id)
+            {
+                System.out.println("eliminom helathistory");
+                HealthMeasureHistory.removeHealthMeasureHistory(list.get(i));
+            }
+        }
+        
 		if (p!=null) {
 			Person.removePerson(p);
 			return 0;
@@ -109,40 +122,6 @@ public class PeopleImpl implements People {
         return finallist;
         
         
-        
-        
-		/*List<HealthMeasureHistory> l= HealthMeasureHistory.getAll();
-        List<HealthMeasureHistory> lf= new ArrayList<HealthMeasureHistory>();
-        List<HealthMeasureHistory> lsf= new ArrayList<HealthMeasureHistory>();
-        System.out.println("looking for history");
-        for (HealthMeasureHistory hl : l) {
-            if(hl.getPerson()!=null){
-            
-                Person p=hl.getPerson();
-                if (p.getIdPerson()==id){
-                    lf.add(hl);
-                    System.out.println("found history adding");
-                
-                }
-            }
-        }
-        System.out.println("second loop");
-        for (HealthMeasureHistory hl2 : lf) {
-            MeasureDefinition measure=hl2.getMeasureDefinition();
-            //System.out.println("measureneme found: "+measure.getMeasureName());
-             System.out.println("measureneme look for: "+measureType);
-            String name=measure.getMeasureName();
-            
-            if (name.equals(measureType)){
-                System.out.println("found history per type adding");
-                lsf.add(hl2);
-                
-            }
-        }
-        //magari mettere if vuota print
-        return lsf;
-*/
-        
       	}
     
      //Method #7:
@@ -189,46 +168,85 @@ public class PeopleImpl implements People {
 	public  LifeStatus savePersonMeasure(Long id,LifeStatus m) {
         Person person=  Person.getPersonById((int)(long) id);
         List<LifeStatus> lifestatus= person.getLifeStatus();
-    
-        MeasureDefinition measure=null;
-        MeasureDefinition measure2=null;
-        //m.setPerson(person);
-        
-        for(LifeStatus lf : lifestatus){
-            measure=lf.getMeasureDefinition();
-            measure2=m.getMeasureDefinition();
+        System.out.println("SAVE LOFESTATUS");
+        System.out.println("mm: "+lifestatus.isEmpty()+" size "+lifestatus.size());
+        if(!lifestatus.isEmpty()){
+            System.out.println("already lifestatus");
+            MeasureDefinition measure=null;
+            MeasureDefinition measure2=null;
             //m.setPerson(person);
-            
-            if(person.getIdPerson()==id){//redundant
-                System.out.println("quiii");
-                if(measure.getMeasureName().equals(measure2.getMeasureName())){
-                    LifeStatus.removeLifeStatus(lf);
+        
+            for(LifeStatus lf : lifestatus){
+                measure=lf.getMeasureDefinition();
+                measure2=m.getMeasureDefinition();
+                //m.setPerson(person);
+                
+                if(person.getIdPerson()==id){//redundant
+                    System.out.println("quiii");
+                    if(measure.getMeasureName().equals(measure2.getMeasureName())){
+                        LifeStatus.removeLifeStatus(lf);
                     
-                    HealthMeasureHistory hlm =new HealthMeasureHistory();
-                    //hlm.setTimestamp(""+System.currentTimeMillis()));
-                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    Date date = new Date();
+                        HealthMeasureHistory hlm =new HealthMeasureHistory();
+                        //hlm.setTimestamp(""+System.currentTimeMillis()));
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        Date date = new Date();
                     
                     
-                    hlm.setTimestamp(dateFormat.format(date));
-                    hlm.setValue(m.getValue());
-                    hlm.setPerson(person);
-                    hlm.setMeasureDefinition(measure);
-                    //hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
-                    hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
-                    HealthMeasureHistory.saveHealthMeasureHistory(hlm);
-                    lf.setValue(m.getValue());
-                    LifeStatus.saveLifeStatus(lf);
-                    m=lf;
-                    System.out.println("salavato tutto");
+                        hlm.setTimestamp(dateFormat.format(date));
+                        hlm.setValue(m.getValue());
+                        hlm.setPerson(person);
+                        hlm.setMeasureDefinition(measure);
+                        //hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
+                        hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
+                        HealthMeasureHistory.saveHealthMeasureHistory(hlm);
+                        lf.setValue(m.getValue());
+                        LifeStatus.saveLifeStatus(lf);
+                        m=lf;
+                        System.out.println("salavato tutto");
                     
+                    }
                 }
-            }
             
+               
+            }
+            return m;
+        }
+        else{
+            System.out.println("no other lifestatus");
+             LifeStatus lftosave1=new LifeStatus();
+             MeasureDefinition mdef1=new MeasureDefinition();
+             mdef1.setMeasureName("weight");
+             mdef1.setIdMeasureDef(1);
+             mdef1.setMeasureType("double");
+             lftosave1.setMeasureDefinition(mdef1);
+             lftosave1.setValue("85");
+             lftosave1.setPerson(person);
+             List<LifeStatus> listlf=new ArrayList <LifeStatus>();
+             listlf.add(lftosave1);
+            
+             person.setLifeStatus(listlf);
+            
+            HealthMeasureHistory hlm =new HealthMeasureHistory();
+            //hlm.setTimestamp(""+System.currentTimeMillis()));
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = new Date();
+            
+            
+            hlm.setTimestamp(dateFormat.format(date));
+            hlm.setValue(lftosave1.getValue());
+            hlm.setPerson(person);
+            hlm.setMeasureDefinition(mdef1);
+            //hlm.setIdMeasureDefinition(measure.getIdMeasureDef());
+            hlm.setIdMeasureDefinition(mdef1.getIdMeasureDef());
+            HealthMeasureHistory.saveHealthMeasureHistory(hlm);
+            
+            System.out.println("salavato tutto");
+            
+            return LifeStatus.saveLifeStatus(lftosave1);
             
         }
         
-        return m;
+       
         
 	}
      //Method #10:

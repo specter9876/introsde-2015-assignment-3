@@ -103,6 +103,8 @@ public class MeasureDefaultRange implements Serializable {
 	// How would you change the DAO to not having to create the entity manager every time? 	
 	public static MeasureDefaultRange getMeasureDefaultRangeById(int id) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
+        
 		MeasureDefaultRange p = em.find(MeasureDefaultRange.class, id);
 		LifeCoachDao.instance.closeConnections(em);
 		return p;
@@ -110,6 +112,7 @@ public class MeasureDefaultRange implements Serializable {
 	
 	public static List<MeasureDefaultRange> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 	    List<MeasureDefaultRange> list = em.createNamedQuery("MeasureDefaultRange.findAll", MeasureDefaultRange.class).getResultList();
 	    LifeCoachDao.instance.closeConnections(em);
 	    return list;
@@ -117,6 +120,7 @@ public class MeasureDefaultRange implements Serializable {
 	
 	public static MeasureDefaultRange saveMeasureDefaultRange(MeasureDefaultRange p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(p);
@@ -127,6 +131,7 @@ public class MeasureDefaultRange implements Serializable {
 	
 	public static MeasureDefaultRange updateMeasureDefaultRange(MeasureDefaultRange p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		p=em.merge(p);
@@ -137,6 +142,7 @@ public class MeasureDefaultRange implements Serializable {
 	
 	public static void removeMeasureDefaultRange(MeasureDefaultRange p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+        em.getEntityManagerFactory().getCache().evictAll();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 	    p=em.merge(p);
